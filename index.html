@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Смета Бау</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Смета Бау</p>
+        <h1>Смета за 5 минут без работы в минус</h1>
+        <p class="hero-copy">Рассчитайте реальную себестоимость заказа с учётом сотрудников, расходов, дороги, партнёра и прибыли.</p>
+      </div>
+      <div class="header-actions">
+        <button class="ghost" id="resetCalculationBtn" type="button">Сбросить</button>
+        <button id="saveSettingsBtn" type="button">Сохранить</button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="welcome-panel" id="welcomePanel" hidden>
+        <div>
+          <p class="eyebrow">Первый запуск</p>
+          <h2>Добро пожаловать в Смета Бау</h2>
+          <p class="welcome-copy">Смета Бау помогает быстро рассчитать строительный заказ, понять реальную прибыль фирмы и подготовить немецкий текст клиенту.</p>
+        </div>
+        <div class="welcome-points">
+          <p>Сначала заполните быстрые данные объекта: тип работы, площадь, людей, дни и расстояние.</p>
+          <p>Приложение посчитает себестоимость, минимальную безопасную цену, прибыль и маржу.</p>
+          <p>После расчёта вы сможете скопировать короткое WhatsApp-сообщение клиенту на немецком.</p>
+        </div>
+        <div class="welcome-actions">
+          <button id="welcomeDemoBtn" type="button">Начать с демо-примера</button>
+          <button class="ghost dark" id="welcomeNewBtn" type="button">Создать новую смету</button>
+          <button class="ghost dark" id="welcomeSettingsBtn" type="button">Настроить фирму</button>
+          <button class="link-button" id="hideWelcomeBtn" type="button">Больше не показывать</button>
+        </div>
+      </section>
+
+      <nav class="tabs" aria-label="Разделы приложения">
+        <button class="tab active" data-tab="calculator" type="button">Новая смета</button>
+        <button class="tab" data-tab="templates" type="button">Мои цены</button>
+        <button class="tab" data-tab="settings" type="button">Сотрудники и расходы</button>
+        <button class="tab" data-tab="result" type="button">Результат</button>
+      </nav>
+
+      <details class="usage-guide" id="usageGuide">
+        <summary>Как пользоваться</summary>
+        <div class="guide-body">
+          <p>1. Заполните быстрые данные объекта: тип работы, площадь, сложность, количество людей, дни работы и расстояние.</p>
+          <p>2. Нажмите “Рассчитать смету”.</p>
+          <p>3. Посмотрите главные цифры: рекомендуемая цена клиенту, минимальная безопасная цена, себестоимость, прибыль, маржа и статус заказа.</p>
+          <p>4. Если хотите понять расчёт подробно, откройте блок “Как посчитано”.</p>
+          <p>5. Если клиент просит дешевле, используйте блок “Проверить свою цену”. Введите цену, которую хотите назвать клиенту, и приложение покажет, сколько прибыли останется.</p>
+          <p>6. Клиенту отправляйте только текст из блока “Что клиенту отправляем”. Внутренний расчёт, себестоимость, зарплаты, маржу и прибыль клиенту не показывайте.</p>
+          <p>7. Если расчёт показывает красный статус, не отправляйте цену сразу. Проверьте расходы, партнёрскую комиссию, дорогу и минимальную безопасную цену.</p>
+          <p>8. Помните: расчёт является ориентировочным. Точная цена зависит от состояния объекта, скрытых дефектов, материалов и условий на месте.</p>
+        </div>
+      </details>
+
+      <section class="panel active" id="calculator">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Новая смета</p>
+            <h2>Быстрый расчёт заказа</h2>
+          </div>
+          <div class="action-stack">
+            <button class="ghost dark" id="loadDemoBtn" type="button">Использовать демо-настройки</button>
+            <button class="ghost dark" id="resetDemoBtn" type="button">Сбросить демо-данные</button>
+          </div>
+        </div>
+        <div class="form-errors" id="formErrors" hidden></div>
+
+        <div class="quick-card">
+          <div class="grid two">
+            <label>Тип работы
+              <select id="workType"></select>
+            </label>
+            <label>Площадь м²
+              <input id="quantity" type="number" min="0" step="0.5" value="42">
+            </label>
+            <label>Сложность
+              <select id="complexity">
+                <option value="simple">simple</option>
+                <option value="medium" selected>medium</option>
+                <option value="hard">hard</option>
+              </select>
+            </label>
+            <label>Людей на объекте
+              <input id="peopleCount" type="number" min="1" step="1" value="2">
+            </label>
+            <label>Дней работы
+              <input id="daysCount" type="number" min="0" step="0.5" value="3">
+            </label>
+            <label>Расстояние, км
+              <input id="distanceKm" type="number" min="0" step="1" value="24">
+            </label>
+            <label class="check wide">
+              <input id="hasPartner" type="checkbox">
+              <span>Партнёр привёл клиента</span>
+            </label>
+          </div>
+          <button class="primary-action quick-submit" id="calculateBtn" type="button">Рассчитать смету</button>
+          <p class="simple-note">Настройки фирмы можно настроить позже. Для первого теста достаточно этих полей.</p>
+        </div>
+
+        <details class="advanced-box">
+          <summary>Детальный расчёт / Дополнительные настройки</summary>
+          <div class="grid three">
+            <label>Клиент / объект
+              <input id="clientName" type="text" value="Familie Schneider">
+            </label>
+            <label>Город
+              <input id="city" type="text" value="Düsseldorf">
+            </label>
+            <label>Выбранные сотрудники
+              <select id="employeeSelect" multiple></select>
+            </label>
+            <label>Часы вручную
+              <input id="manualHours" type="number" min="0" step="0.5" placeholder="если нужно">
+            </label>
+            <label>Материалы вручную, €
+              <input id="manualMaterials" type="number" min="0" step="10" placeholder="если известно">
+            </label>
+            <label>Время осмотр/смета/организация, ч
+              <input id="adminHours" type="number" min="0" step="0.5" value="3">
+            </label>
+            <label class="check">
+              <input id="hasDemolition" type="checkbox">
+              <span>Демонтаж</span>
+            </label>
+            <label class="check">
+              <input id="hasPreparation" type="checkbox" checked>
+              <span>Подготовка основания</span>
+            </label>
+            <label>Комиссия партнёра
+              <select id="partnerMode">
+                <option value="fixed">фикс</option>
+                <option value="turnover" selected>% от оборота</option>
+                <option value="profit">% от прибыли</option>
+              </select>
+              <span class="field-hint">Комиссия партнёра — деньги за приведённого клиента. Она уменьшает вашу прибыль.</span>
+            </label>
+            <label>Размер комиссии
+              <input id="partnerValue" type="number" min="0" step="1" value="10">
+            </label>
+            <label class="check">
+              <input id="paidVisit" type="checkbox">
+              <span>Платный выезд</span>
+            </label>
+            <label>Стоимость платного выезда, €
+              <input id="paidVisitPrice" type="number" min="0" step="5" value="60">
+            </label>
+          </div>
+        </details>
+      </section>
+
+      <section class="panel" id="templates">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Мои цены</p>
+            <h2>Шаблоны работ</h2>
+          </div>
+          <button class="small" id="addTemplateBtn" type="button">+ Шаблон</button>
+        </div>
+        <div class="template-grid" id="templatesGrid"></div>
+      </section>
+
+      <section class="panel" id="settings">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Сотрудники и расходы</p>
+            <h2>Реальная себестоимость фирмы</h2>
+          </div>
+          <span class="save-state" id="saveState">localStorage</span>
+        </div>
+
+        <div class="settings-card">
+          <h3>Фирма</h3>
+          <div class="grid two">
+            <label>Название фирмы
+              <input id="companyName" type="text" value="BauTeam Muster GmbH">
+            </label>
+            <label>Режим налогообложения
+              <select id="taxMode">
+                <option value="klein">Kleinunternehmer</option>
+                <option value="regel">Regelbesteuerung</option>
+              </select>
+            </label>
+            <label class="check">
+              <input id="includeVat" type="checkbox" checked>
+              <span>Включать НДС в цену клиента</span>
+            </label>
+            <label>Минимальная прибыль, %
+              <input id="minProfit" type="number" min="0" step="1" value="18">
+              <span class="field-hint">Это нижняя граница маржи, при которой заказ ещё имеет смысл для фирмы.</span>
+            </label>
+            <label>Риск/резерв по умолчанию, %
+              <input id="defaultRisk" type="number" min="0" step="1" value="8">
+              <span class="field-hint">Резерв закрывает мелкие сюрпризы: докупки, переделки, простои и скрытые дефекты.</span>
+            </label>
+            <label>Комиссия партнёра по умолчанию, %
+              <input id="defaultPartnerCommission" type="number" min="0" step="1" value="10">
+            </label>
+            <label>Стоимость выезда, €
+              <input id="visitPrice" type="number" min="0" step="5" value="60">
+            </label>
+            <label>Цена за км, €
+              <input id="kmPrice" type="number" min="0" step="0.05" value="0.75">
+            </label>
+          </div>
+        </div>
+
+        <section class="setup-wizard">
+          <div class="subhead">
+            <h3>Настроить фирму за 3 минуты</h3>
+            <button class="small" id="applyWizardBtn" type="button">Применить</button>
+          </div>
+          <div class="wizard-steps">
+            <article>
+              <span class="step-label">Шаг 1</span>
+              <h4>Кто работает в фирме?</h4>
+              <div class="grid three">
+                <label>Количество сотрудников
+                  <input id="wizardEmployeeCount" type="number" min="1" step="1" value="2">
+                </label>
+                <label>Средняя стоимость часа, €
+                  <input id="wizardHourCost" type="number" min="0" step="1" value="32">
+                </label>
+                <label>Продуктивное время, %
+                  <input id="wizardProductive" type="number" min="1" max="100" step="1" value="75">
+                  <span class="field-hint">Продуктивное время — это часы, за которые сотрудник реально приносит деньги. Дорога, закупка материалов и простои сюда не входят.</span>
+                </label>
+              </div>
+            </article>
+            <article>
+              <span class="step-label">Шаг 2</span>
+              <h4>Постоянные расходы</h4>
+              <p class="section-hint">Эти расходы фирма платит каждый месяц. Приложение распределяет их на заказы, чтобы вы не работали в минус.</p>
+              <div class="grid three">
+                <label>Машина, €/мес<input id="wizardVehicle" type="number" min="0" step="10" value="620"></label>
+                <label>Страховки, €/мес<input id="wizardInsurance" type="number" min="0" step="10" value="240"></label>
+                <label>Бухгалтер, €/мес<input id="wizardAccountant" type="number" min="0" step="10" value="180"></label>
+                <label>Реклама, €/мес<input id="wizardAds" type="number" min="0" step="10" value="260"></label>
+                <label>Инструмент, €/мес<input id="wizardTools" type="number" min="0" step="10" value="190"></label>
+                <label>Прочее, €/мес<input id="wizardOther" type="number" min="0" step="10" value="180"></label>
+              </div>
+            </article>
+            <article>
+              <span class="step-label">Шаг 3</span>
+              <h4>Правила расчёта</h4>
+              <div class="grid three">
+                <label>Минимальная желаемая маржа, %<input id="wizardMinProfit" type="number" min="0" step="1" value="18"></label>
+                <label>Риск / резерв, %<input id="wizardRisk" type="number" min="0" step="1" value="8"></label>
+                <label>Комиссия партнёра, %<input id="wizardPartnerCommission" type="number" min="0" step="1" value="10"></label>
+                <label>Налоговый режим
+                  <select id="wizardTaxMode">
+                    <option value="klein">Kleinunternehmer</option>
+                    <option value="regel">19% MwSt</option>
+                  </select>
+                </label>
+              </div>
+            </article>
+            <article>
+              <span class="step-label">Шаг 4</span>
+              <h4>Готово</h4>
+              <p>Теперь можно считать первую смету. Настройки можно изменить позже.</p>
+              <button id="wizardToCalculatorBtn" type="button">Перейти к новой смете</button>
+            </article>
+          </div>
+        </section>
+
+        <div class="subhead">
+          <h3>Сотрудники</h3>
+          <button class="small" id="addEmployeeBtn" type="button">+ Добавить</button>
+        </div>
+        <p class="section-hint">Продуктивное время — это часы, за которые работник реально приносит деньги. Дорога, закупки и простои сюда не входят.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Имя</th>
+                <th>Тип</th>
+                <th>Brutto/ставка</th>
+                <th>Доп. расходы %</th>
+                <th>Часы/мес</th>
+                <th>Продуктивно %</th>
+                <th>Себестоимость €/ч</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="employeesBody"></tbody>
+          </table>
+        </div>
+
+        <div class="subhead">
+          <h3>Постоянные расходы фирмы</h3>
+          <span id="overheadTotal">0 €/мес</span>
+        </div>
+        <p class="section-hint">Постоянные расходы — это деньги, которые фирма платит каждый месяц, даже если объект маленький.</p>
+        <div class="grid four" id="overheadsGrid"></div>
+      </section>
+
+      <section class="panel" id="result">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Результат</p>
+            <h2>Цена, ниже которой нельзя опускаться</h2>
+          </div>
+          <div class="segmented">
+            <button class="active" data-view="internal" type="button">Interne Ansicht</button>
+            <button data-view="customer" type="button">Kundenansicht</button>
+          </div>
+        </div>
+
+        <div class="result-layout">
+          <article class="summary">
+            <span class="status" id="statusBadge">Нет расчёта</span>
+            <p class="total" id="totalPrice">0 €</p>
+            <p class="muted" id="marginText">Нажмите «Рассчитать смету»</p>
+          </article>
+
+          <article class="result-view active" id="internalView">
+            <div class="metric-grid">
+              <div class="metric-card main">
+                <span>Рекомендуемая цена клиенту</span>
+                <strong id="recommendedPrice">0 €</strong>
+              </div>
+              <div class="metric-card danger-note">
+                <span>Ниже этой цены заказ брать опасно</span>
+                <strong id="safePrice">0 €</strong>
+                <p class="metric-hint">Минимальная безопасная цена — ниже этой суммы заказ может стать невыгодным.</p>
+              </div>
+              <div class="metric-card">
+                <span>Себестоимость</span>
+                <strong id="costPrice">0 €</strong>
+              </div>
+              <div class="metric-card">
+                <span>Прибыль</span>
+                <strong id="profitPrice">0 €</strong>
+              </div>
+              <div class="metric-card">
+                <span>Маржа</span>
+                <strong id="marginMetric">0%</strong>
+                <p class="metric-hint">Маржа показывает, какая часть цены остаётся фирме после расходов.</p>
+              </div>
+            </div>
+            <p class="status-explain" id="statusExplanation">Сначала рассчитайте смету.</p>
+            <section class="order-check" id="orderCheck">
+              <h3>Проверка заказа</h3>
+              <p id="orderCheckText">Сначала рассчитайте смету.</p>
+            </section>
+            <section class="manual-price">
+              <h3>Хотите проверить свою цену?</h3>
+              <p class="section-hint">Введите цену, которую хотите назвать клиенту, и программа покажет прибыль и риск.</p>
+              <label>Желаемая цена клиенту, €
+                <input id="manualClientPrice" type="number" min="0" step="50" placeholder="например 4500">
+              </label>
+              <div class="manual-result" id="manualPriceResult">Введите цену, чтобы увидеть прибыль и маржу.</div>
+            </section>
+            <div class="warnings" id="warningsBox" hidden></div>
+            <section class="next-actions">
+              <button id="copyWhatsappBtn" type="button">Скопировать WhatsApp-текст</button>
+              <button class="ghost dark" id="newEstimateBtn" type="button">Новая смета</button>
+            </section>
+            <section class="calculation-details">
+              <button class="ghost dark detail-toggle" id="toggleBreakdownBtn" type="button">Показать подробный расчёт</button>
+              <div class="breakdown-panel" id="breakdownPanel" hidden>
+                <h3>Как посчитано</h3>
+                <p class="section-hint">Это внутренняя информация для владельца фирмы. Клиенту её не показывать.</p>
+                <div class="breakdown" id="breakdown"></div>
+              </div>
+            </section>
+            <section class="send-card">
+              <h3>Что клиенту отправляем</h3>
+              <p class="section-hint">Этот текст можно отправить клиенту. Он не содержит внутреннюю себестоимость и прибыль.</p>
+              <div class="customer-text" id="resultCustomerText"></div>
+              <button id="copyGermanInlineBtn" type="button">Скопировать полный немецкий текст</button>
+            </section>
+          </article>
+
+          <article class="result-view" id="customerView">
+            <div class="customer-card">
+              <h3 id="customerTitle">Предложение для клиента</h3>
+              <p id="customerIntro"></p>
+              <div class="customer-text" id="customerText"></div>
+              <button id="copyGermanBtn" type="button">Скопировать немецкий текст</button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="app-footer">
+      <button class="link-button" id="showWelcomeAgainBtn" type="button">Показать инструкцию снова</button>
+      <span>Тестовая версия. Расчёт является ориентировочным и не заменяет профессиональную смету.</span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
