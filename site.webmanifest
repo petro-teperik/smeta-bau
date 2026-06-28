@@ -1,0 +1,21 @@
+{
+  "name": "Smeta Bau",
+  "short_name": "Смета Бау",
+  "description": "Тестовый прототип веб-приложения для строительных мини-фирм в Германии.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f3f5f0",
+  "theme_color": "#17211c",
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
