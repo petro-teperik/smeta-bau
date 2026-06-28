@@ -1,5 +1,603 @@
 const STORAGE_KEY = "baukalk-pro-state-v1";
 const WELCOME_KEY = "smeta-bau-welcome-hidden-v1";
+const LANGUAGE_KEY = "smeta-bau-language-v1";
+
+const translations = {
+  ru: {
+    appName: "Смета Бау",
+    heroTitle: "Смета за 5 минут без работы в минус",
+    heroCopy: "Рассчитайте реальную себестоимость заказа с учётом сотрудников, расходов, дороги, партнёра и прибыли.",
+    reset: "Сбросить",
+    save: "Сохранить",
+    saved: "Сохранено",
+    firstRun: "Первый запуск",
+    welcomeTitle: "Добро пожаловать в Смета Бау",
+    welcomeCopy: "Смета Бау помогает быстро рассчитать строительный заказ, понять реальную прибыль фирмы и подготовить немецкий текст клиенту.",
+    welcome1: "Сначала заполните быстрые данные объекта: тип работы, площадь, людей, дни и расстояние.",
+    welcome2: "Приложение посчитает себестоимость, минимальную безопасную цену, прибыль и маржу.",
+    welcome3: "После расчёта вы сможете скопировать короткое WhatsApp-сообщение клиенту на немецком.",
+    startDemo: "Начать с демо-примера",
+    createEstimate: "Создать новую смету",
+    setupCompany: "Настроить фирму",
+    hideWelcome: "Больше не показывать",
+    navEstimate: "Новая смета",
+    navPrices: "Мои цены",
+    navSettings: "Сотрудники и расходы",
+    navResult: "Результат",
+    howTo: "Как пользоваться",
+    guide: [
+      "1. Заполните быстрые данные объекта: тип работы, площадь, сложность, количество людей, дни работы и расстояние.",
+      "2. Нажмите “Рассчитать смету”.",
+      "3. Посмотрите главные цифры: рекомендуемая цена клиенту, минимальная безопасная цена, себестоимость, прибыль, маржа и статус заказа.",
+      "4. Если хотите понять расчёт подробно, откройте блок “Как посчитано”.",
+      "5. Если клиент просит дешевле, используйте блок “Проверить свою цену”. Введите цену, которую хотите назвать клиенту, и приложение покажет, сколько прибыли останется.",
+      "6. Клиенту отправляйте только текст из блока “Что клиенту отправляем”. Внутренний расчёт, себестоимость, зарплаты, маржу и прибыль клиенту не показывайте.",
+      "7. Если расчёт показывает красный статус, не отправляйте цену сразу. Проверьте расходы, партнёрскую комиссию, дорогу и минимальную безопасную цену.",
+      "8. Помните: расчёт является ориентировочным. Точная цена зависит от состояния объекта, скрытых дефектов, материалов и условий на месте."
+    ],
+    newEstimateEyebrow: "Новая смета",
+    quickCalcTitle: "Быстрый расчёт заказа",
+    useDemo: "Использовать демо-настройки",
+    resetDemo: "Сбросить демо-данные",
+    workType: "Тип работы",
+    area: "Площадь м²",
+    complexity: "Сложность",
+    people: "Людей на объекте",
+    days: "Дней работы",
+    distance: "Расстояние, км",
+    partnerBrought: "Партнёр привёл клиента",
+    calculate: "Рассчитать смету",
+    simpleNote: "Настройки фирмы можно настроить позже. Для первого теста достаточно этих полей.",
+    advanced: "Детальный расчёт / Дополнительные настройки",
+    clientObject: "Клиент / объект",
+    city: "Город",
+    selectedEmployees: "Выбранные сотрудники",
+    manualHours: "Часы вручную",
+    manualMaterials: "Материалы вручную, €",
+    adminHours: "Время осмотр/смета/организация, ч",
+    demolition: "Демонтаж",
+    preparation: "Подготовка основания",
+    partnerCommission: "Комиссия партнёра",
+    partnerHint: "Комиссия партнёра — деньги за приведённого клиента. Она уменьшает вашу прибыль.",
+    commissionSize: "Размер комиссии",
+    paidVisit: "Платный выезд",
+    paidVisitPrice: "Стоимость платного выезда, €",
+    pricesEyebrow: "Мои цены",
+    workTemplates: "Шаблоны работ",
+    addTemplate: "+ Шаблон",
+    settingsEyebrow: "Сотрудники и расходы",
+    realCostTitle: "Реальная себестоимость фирмы",
+    company: "Фирма",
+    companyName: "Название фирмы",
+    taxMode: "Режим налогообложения",
+    includeVat: "Включать НДС в цену клиента",
+    minProfit: "Минимальная прибыль, %",
+    minProfitHint: "Это нижняя граница маржи, при которой заказ ещё имеет смысл для фирмы.",
+    riskReserve: "Риск/резерв по умолчанию, %",
+    riskHint: "Риск — резерв на непредвиденные работы: докупки, переделки, простои и скрытые дефекты.",
+    defaultPartner: "Комиссия партнёра по умолчанию, %",
+    visitPrice: "Стоимость выезда, €",
+    kmPrice: "Цена за км, €",
+    wizardTitle: "Настроить фирму за 3 минуты",
+    apply: "Применить",
+    step1: "Шаг 1",
+    step2: "Шаг 2",
+    step3: "Шаг 3",
+    step4: "Шаг 4",
+    whoWorks: "Кто работает в фирме?",
+    employeeCount: "Количество сотрудников",
+    avgHourCost: "Средняя стоимость часа, €",
+    productiveTime: "Продуктивное время, %",
+    productiveHint: "Продуктивное время — это часы, за которые сотрудник реально приносит деньги. Дорога, закупка материалов и простои сюда не входят.",
+    fixedCosts: "Постоянные расходы",
+    fixedCostsHint: "Эти расходы фирма платит каждый месяц. Приложение распределяет их на заказы, чтобы вы не работали в минус.",
+    vehicle: "Машина, €/мес",
+    insurance: "Страховки, €/мес",
+    accountant: "Бухгалтер, €/мес",
+    ads: "Реклама, €/мес",
+    tools: "Инструмент, €/мес",
+    other: "Прочее, €/мес",
+    calcRules: "Правила расчёта",
+    desiredMargin: "Минимальная желаемая маржа, %",
+    riskPercent: "Риск / резерв, %",
+    defaultPartnerPercent: "Комиссия партнёра, %",
+    taxModeLabel: "Налоговый режим",
+    ready: "Готово",
+    readyText: "Теперь можно считать первую смету. Настройки можно изменить позже.",
+    goEstimate: "Перейти к новой смете",
+    employees: "Сотрудники",
+    addEmployee: "+ Добавить",
+    productiveSectionHint: "Продуктивное время — это часы, за которые работник реально приносит деньги. Дорога, закупки и простои сюда не входят.",
+    overheads: "Постоянные расходы фирмы",
+    overheadsHint: "Постоянные расходы — это деньги, которые фирма платит каждый месяц, даже если объект маленький.",
+    resultEyebrow: "Результат",
+    resultTitle: "Цена, ниже которой нельзя опускаться",
+    noCalc: "Нет расчёта",
+    clickCalculate: "Нажмите “Рассчитать смету”",
+    recommendedPrice: "Рекомендуемая цена клиенту",
+    safePriceDanger: "Ниже этой цены заказ брать опасно",
+    safePriceHint: "Минимальная безопасная цена — ниже этой суммы заказ может стать невыгодным.",
+    selfCost: "Себестоимость",
+    profit: "Прибыль",
+    margin: "Маржа",
+    marginHint: "Маржа — сколько остаётся фирме после расходов.",
+    orderCheck: "Проверка заказа",
+    checkPriceTitle: "Хотите проверить свою цену?",
+    checkPriceHint: "Введите цену, которую хотите назвать клиенту, и программа покажет прибыль и риск.",
+    desiredClientPrice: "Желаемая цена клиенту, €",
+    manualPriceEmpty: "Введите цену, чтобы увидеть прибыль и маржу.",
+    copyWhatsapp: "Скопировать WhatsApp-текст",
+    newEstimate: "Новая смета",
+    showBreakdown: "Показать подробный расчёт",
+    hideBreakdown: "Скрыть подробный расчёт",
+    howCalculated: "Как посчитано",
+    internalHint: "Это внутренняя информация для владельца фирмы. Клиенту её не показывать.",
+    sendToClient: "Что клиенту отправляем",
+    clientTextHint: "Этот текст можно отправить клиенту. Он не содержит внутреннюю себестоимость и прибыль.",
+    copyFullGerman: "Скопировать полный немецкий текст",
+    customerOffer: "Предложение для клиента",
+    copyGerman: "Скопировать немецкий текст",
+    showInstruction: "Показать инструкцию снова",
+    footer: "Тестовая версия. Расчёт является ориентировочным и не заменяет профессиональную смету.",
+    copied: "Скопировано",
+    whatsappShort: "Короткое WhatsApp-сообщение",
+    fullOffer: "Полный текст предложения",
+    germanClientText: "Немецкий текст для клиента",
+    russianTranslation: "Русский перевод",
+    ukrainianTranslation: "Украинский перевод",
+    materials: "Материалы",
+    workHours: "Рабочие часы",
+    employeeCost: "Стоимость сотрудников",
+    adminCost: "Админ/смета/организация",
+    travel: "Дорога",
+    overheadShare: "Доля постоянных расходов фирмы",
+    risk: "Риск/резерв",
+    profitPerDay: "Прибыль в день",
+    profitPerPersonDay: "Прибыль на человеко-день",
+    vat: "НДС",
+    finalClientPrice: "Итоговая цена клиенту",
+    statusOk: "Зелёный · заказ выгодный",
+    statusWarn: "Жёлтый · согласовать бюджет",
+    statusDanger: "Красный · пересчитать",
+    statusOkSimple: "Можно брать",
+    statusWarnSimple: "Брать только после согласования бюджета",
+    statusDangerSimple: "Не брать по такой цене",
+    validationArea: "Введите площадь объекта",
+    validationPeople: "Укажите количество людей",
+    validationDays: "Укажите количество дней",
+    validationDistance: "Укажите расстояние до объекта",
+    warnMargin: "Маржа ниже безопасного уровня. Проверьте цену перед отправкой клиенту.",
+    warnProfitDay: "Прибыль в день слишком маленькая для нормальной загрузки фирмы.",
+    warnPartner: "Комиссия партнёра заметно снижает прибыль по этому заказу.",
+    warnTravel: "Дорога и подготовка занимают много времени. Не стоит ехать без предварительного согласования бюджета.",
+    warnSafe: "Цена ниже минимальной безопасной. Есть риск работы почти без прибыли.",
+    warnManualSafe: "Ручная цена ниже минимальной безопасной. Такой заказ легко уйдёт почти без прибыли.",
+    manualStatusOk: "выгодно",
+    manualStatusWarn: "опасно",
+    manualStatusDanger: "невыгодно"
+  },
+  de: {},
+  ua: {}
+};
+
+translations.de = {
+  ...translations.ru,
+  appName: "Smeta Bau",
+  heroTitle: "Kalkulation in 5 Minuten — ohne Verlust zu arbeiten",
+  heroCopy: "Berechnen Sie die realen Selbstkosten eines Auftrags inklusive Mitarbeiter, Fixkosten, Anfahrt, Partnerprovision und Gewinn.",
+  reset: "Zurücksetzen",
+  save: "Speichern",
+  saved: "Gespeichert",
+  firstRun: "Erster Start",
+  welcomeTitle: "Willkommen bei Smeta Bau",
+  welcomeCopy: "Smeta Bau hilft, Bauaufträge schnell zu kalkulieren, den echten Firmengewinn zu verstehen und einen deutschen Kundentext vorzubereiten.",
+  welcome1: "Füllen Sie zuerst die schnellen Objektdaten aus: Leistung, Fläche, Personen, Tage und Entfernung.",
+  welcome2: "Die App berechnet Selbstkosten, minimal sicheren Preis, Gewinn und Marge.",
+  welcome3: "Nach der Berechnung können Sie eine kurze WhatsApp-Nachricht auf Deutsch kopieren.",
+  startDemo: "Mit Demo-Beispiel starten",
+  createEstimate: "Neue Kalkulation erstellen",
+  setupCompany: "Firma einrichten",
+  hideWelcome: "Nicht mehr anzeigen",
+  navEstimate: "Neue Kalkulation",
+  navPrices: "Meine Preise",
+  navSettings: "Mitarbeiter & Kosten",
+  navResult: "Ergebnis",
+  howTo: "So funktioniert es",
+  guide: [
+    "1. Füllen Sie die schnellen Objektdaten aus: Leistung, Fläche, Schwierigkeit, Anzahl der Personen, Arbeitstage und Entfernung.",
+    "2. Klicken Sie auf „Kalkulation berechnen“.",
+    "3. Prüfen Sie die wichtigsten Zahlen: empfohlener Kundenpreis, minimal sicherer Preis, Selbstkosten, Gewinn, Marge und Auftragsstatus.",
+    "4. Für Details öffnen Sie den Block „Detaillierte Berechnung“.",
+    "5. Wenn der Kunde weniger zahlen möchte, nutzen Sie „Eigenen Preis prüfen“. Geben Sie den Kundenpreis ein und die App zeigt den verbleibenden Gewinn.",
+    "6. Senden Sie dem Kunden nur den Text aus „Was an den Kunden gesendet wird“. Interne Kosten, Löhne, Marge und Gewinn nicht weitergeben.",
+    "7. Bei rotem Status den Preis nicht sofort senden. Prüfen Sie Kosten, Partnerprovision, Anfahrt und minimal sicheren Preis.",
+    "8. Die Berechnung ist eine Orientierung. Der genaue Preis hängt vom Objektzustand, verdeckten Mängeln, Material und Bedingungen vor Ort ab."
+  ],
+  newEstimateEyebrow: "Neue Kalkulation",
+  quickCalcTitle: "Schnelle Auftragskalkulation",
+  useDemo: "Demo-Einstellungen nutzen",
+  resetDemo: "Demo-Daten löschen",
+  workType: "Leistung",
+  area: "Fläche m²",
+  complexity: "Schwierigkeit",
+  people: "Personen auf der Baustelle",
+  days: "Arbeitstage",
+  distance: "Entfernung, km",
+  partnerBrought: "Kunde kam über Partner",
+  calculate: "Kalkulation berechnen",
+  simpleNote: "Firmeneinstellungen können später angepasst werden. Für den ersten Test reichen diese Felder.",
+  advanced: "Detaillierte Berechnung / Zusätzliche Einstellungen",
+  clientObject: "Kunde / Objekt",
+  city: "Stadt",
+  selectedEmployees: "Ausgewählte Mitarbeiter",
+  manualHours: "Stunden manuell",
+  manualMaterials: "Material manuell, €",
+  adminHours: "Besichtigung/Kalkulation/Organisation, Std.",
+  demolition: "Demontage",
+  preparation: "Untergrundvorbereitung",
+  partnerCommission: "Partnerprovision",
+  partnerHint: "Partnerprovision ist Geld für einen vermittelten Kunden. Sie reduziert Ihren Gewinn.",
+  commissionSize: "Provision",
+  paidVisit: "Bezahlte Besichtigung",
+  paidVisitPrice: "Preis der Besichtigung, €",
+  pricesEyebrow: "Meine Preise",
+  workTemplates: "Leistungsvorlagen",
+  addTemplate: "+ Vorlage",
+  settingsEyebrow: "Mitarbeiter & Kosten",
+  realCostTitle: "Reale Selbstkosten der Firma",
+  company: "Firma",
+  companyName: "Firmenname",
+  taxMode: "Steuerregelung",
+  includeVat: "MwSt im Kundenpreis berücksichtigen",
+  minProfit: "Minimaler Gewinn, %",
+  minProfitHint: "Das ist die untere Marge, ab der ein Auftrag für die Firma sinnvoll bleibt.",
+  riskReserve: "Risiko/Reserve standardmäßig, %",
+  riskHint: "Risiko ist eine Reserve für unvorhergesehene Arbeiten: Nachkauf, Nacharbeit, Wartezeiten und verdeckte Mängel.",
+  defaultPartner: "Partnerprovision standardmäßig, %",
+  visitPrice: "Anfahrt/Besichtigung, €",
+  kmPrice: "Preis pro km, €",
+  wizardTitle: "Firma in 3 Minuten einrichten",
+  apply: "Übernehmen",
+  step1: "Schritt 1",
+  step2: "Schritt 2",
+  step3: "Schritt 3",
+  step4: "Schritt 4",
+  whoWorks: "Wer arbeitet in der Firma?",
+  employeeCount: "Anzahl Mitarbeiter",
+  avgHourCost: "Durchschnittlicher Stundensatz, €",
+  productiveTime: "Produktive Zeit, %",
+  productiveHint: "Produktive Zeit sind Stunden, in denen ein Mitarbeiter wirklich Geld verdient. Anfahrt, Materialkauf und Leerlauf zählen nicht dazu.",
+  fixedCosts: "Fixkosten",
+  fixedCostsHint: "Diese Kosten zahlt die Firma jeden Monat. Die App verteilt sie auf Aufträge, damit Sie nicht mit Verlust arbeiten.",
+  vehicle: "Fahrzeug, €/Monat",
+  insurance: "Versicherungen, €/Monat",
+  accountant: "Buchhaltung, €/Monat",
+  ads: "Werbung, €/Monat",
+  tools: "Werkzeug, €/Monat",
+  other: "Sonstiges, €/Monat",
+  calcRules: "Kalkulationsregeln",
+  desiredMargin: "Gewünschte Mindestmarge, %",
+  riskPercent: "Risiko / Reserve, %",
+  defaultPartnerPercent: "Partnerprovision, %",
+  taxModeLabel: "Steuerregelung",
+  ready: "Fertig",
+  readyText: "Jetzt können Sie die erste Kalkulation erstellen. Einstellungen können später geändert werden.",
+  goEstimate: "Zur neuen Kalkulation",
+  employees: "Mitarbeiter",
+  addEmployee: "+ Hinzufügen",
+  productiveSectionHint: "Produktive Zeit sind Stunden, in denen der Mitarbeiter wirklich Geld verdient. Anfahrt, Einkauf und Leerlauf zählen nicht dazu.",
+  overheads: "Fixkosten der Firma",
+  overheadsHint: "Fixkosten zahlt die Firma jeden Monat, auch wenn der Auftrag klein ist.",
+  resultEyebrow: "Ergebnis",
+  resultTitle: "Preis, unter den Sie nicht gehen sollten",
+  noCalc: "Keine Berechnung",
+  clickCalculate: "Klicken Sie auf „Kalkulation berechnen“",
+  recommendedPrice: "Empfohlener Kundenpreis",
+  safePriceDanger: "Unter diesem Preis ist der Auftrag riskant",
+  safePriceHint: "Minimal sicherer Preis — darunter kann der Auftrag unwirtschaftlich werden.",
+  selfCost: "Selbstkosten",
+  profit: "Gewinn",
+  margin: "Marge",
+  marginHint: "Marge zeigt, was der Firma nach den Kosten bleibt.",
+  orderCheck: "Auftragsprüfung",
+  checkPriceTitle: "Eigenen Preis prüfen?",
+  checkPriceHint: "Geben Sie den Preis ein, den Sie dem Kunden nennen möchten. Die App zeigt Gewinn und Risiko.",
+  desiredClientPrice: "Gewünschter Kundenpreis, €",
+  manualPriceEmpty: "Geben Sie einen Preis ein, um Gewinn und Marge zu sehen.",
+  copyWhatsapp: "WhatsApp-Text kopieren",
+  newEstimate: "Neue Kalkulation",
+  showBreakdown: "Detaillierte Berechnung anzeigen",
+  hideBreakdown: "Detaillierte Berechnung ausblenden",
+  howCalculated: "Detaillierte Berechnung",
+  internalHint: "Das sind interne Informationen für den Firmeninhaber. Nicht an Kunden weitergeben.",
+  sendToClient: "Was an den Kunden gesendet wird",
+  clientTextHint: "Dieser Text kann an den Kunden gesendet werden. Er enthält keine internen Selbstkosten und keinen Gewinn.",
+  copyFullGerman: "Vollständigen deutschen Text kopieren",
+  customerOffer: "Angebot für den Kunden",
+  copyGerman: "Deutschen Text kopieren",
+  showInstruction: "Anleitung erneut anzeigen",
+  footer: "Testversion. Die Berechnung ist eine Orientierung und ersetzt keine professionelle Kalkulation.",
+  copied: "Kopiert",
+  whatsappShort: "Kurze WhatsApp-Nachricht",
+  fullOffer: "Vollständiger Angebotstext",
+  germanClientText: "Deutscher Kundentext",
+  russianTranslation: "Russische Übersetzung",
+  ukrainianTranslation: "Ukrainische Übersetzung",
+  materials: "Material",
+  workHours: "Arbeitsstunden",
+  employeeCost: "Mitarbeiterkosten",
+  adminCost: "Admin/Kalkulation/Organisation",
+  travel: "Anfahrt",
+  overheadShare: "Anteil der Fixkosten",
+  risk: "Risiko/Reserve",
+  profitPerDay: "Gewinn pro Tag",
+  profitPerPersonDay: "Gewinn pro Personentag",
+  vat: "MwSt",
+  finalClientPrice: "Endpreis für den Kunden",
+  statusOk: "Grün · Auftrag rentabel",
+  statusWarn: "Gelb · Budget abstimmen",
+  statusDanger: "Rot · neu kalkulieren",
+  statusOkSimple: "Kann angenommen werden",
+  statusWarnSimple: "Nur nach Budgetabstimmung annehmen",
+  statusDangerSimple: "Zu diesem Preis nicht annehmen",
+  validationArea: "Fläche des Objekts eingeben",
+  validationPeople: "Anzahl der Personen angeben",
+  validationDays: "Anzahl der Arbeitstage angeben",
+  validationDistance: "Entfernung zum Objekt angeben",
+  warnMargin: "Die Marge liegt unter dem sicheren Niveau. Preis vor dem Senden prüfen.",
+  warnProfitDay: "Der Gewinn pro Tag ist für eine normale Firmenauslastung zu niedrig.",
+  warnPartner: "Die Partnerprovision reduziert den Gewinn bei diesem Auftrag deutlich.",
+  warnTravel: "Anfahrt und Vorbereitung nehmen viel Zeit ein. Budget vorab abstimmen.",
+  warnSafe: "Der Preis liegt unter dem minimal sicheren Preis. Risiko von Arbeit fast ohne Gewinn.",
+  warnManualSafe: "Der manuelle Preis liegt unter dem minimal sicheren Preis. Dieser Auftrag kann fast ohne Gewinn enden.",
+  manualStatusOk: "rentabel",
+  manualStatusWarn: "riskant",
+  manualStatusDanger: "unrentabel"
+};
+
+translations.ua = {
+  ...translations.ru,
+  appName: "Смета Бау",
+  heroTitle: "Кошторис за 5 хвилин без роботи в мінус",
+  heroCopy: "Розрахуйте реальну собівартість замовлення з урахуванням працівників, витрат, дороги, партнера та прибутку.",
+  reset: "Скинути",
+  save: "Зберегти",
+  saved: "Збережено",
+  firstRun: "Перший запуск",
+  welcomeTitle: "Ласкаво просимо до Смета Бау",
+  welcomeCopy: "Смета Бау допомагає швидко розрахувати будівельне замовлення, зрозуміти реальний прибуток фірми та підготувати німецький текст клієнту.",
+  welcome1: "Спочатку заповніть швидкі дані об’єкта: тип роботи, площу, людей, дні та відстань.",
+  welcome2: "Додаток порахує собівартість, мінімальну безпечну ціну, прибуток і маржу.",
+  welcome3: "Після розрахунку ви зможете скопіювати коротке WhatsApp-повідомлення клієнту німецькою.",
+  startDemo: "Почати з демо-прикладу",
+  createEstimate: "Створити новий кошторис",
+  setupCompany: "Налаштувати фірму",
+  hideWelcome: "Більше не показувати",
+  navEstimate: "Новий кошторис",
+  navPrices: "Мої ціни",
+  navSettings: "Працівники та витрати",
+  navResult: "Результат",
+  howTo: "Як користуватися",
+  guide: [
+    "1. Заповніть швидкі дані об’єкта: тип роботи, площу, складність, кількість людей, дні роботи та відстань.",
+    "2. Натисніть “Розрахувати кошторис”.",
+    "3. Подивіться головні цифри: рекомендована ціна клієнту, мінімальна безпечна ціна, собівартість, прибуток, маржа та статус замовлення.",
+    "4. Якщо хочете зрозуміти розрахунок детально, відкрийте блок “Детальний розрахунок”.",
+    "5. Якщо клієнт просить дешевше, використайте блок “Перевірити свою ціну”. Введіть ціну для клієнта, і додаток покаже, скільки прибутку залишиться.",
+    "6. Клієнту надсилайте тільки текст із блоку “Що надсилаємо клієнту”. Внутрішній розрахунок, собівартість, зарплати, маржу та прибуток клієнту не показуйте.",
+    "7. Якщо розрахунок показує червоний статус, не надсилайте ціну одразу. Перевірте витрати, комісію партнера, дорогу та мінімальну безпечну ціну.",
+    "8. Пам’ятайте: розрахунок є орієнтовним. Точна ціна залежить від стану об’єкта, прихованих дефектів, матеріалів і умов на місці."
+  ],
+  newEstimateEyebrow: "Новий кошторис",
+  quickCalcTitle: "Швидкий розрахунок замовлення",
+  useDemo: "Використати демо-налаштування",
+  resetDemo: "Скинути демо-дані",
+  workType: "Тип роботи",
+  area: "Площа м²",
+  complexity: "Складність",
+  people: "Людей на об’єкті",
+  days: "Днів роботи",
+  distance: "Відстань, км",
+  partnerBrought: "Клієнта привів партнер",
+  calculate: "Розрахувати кошторис",
+  simpleNote: "Налаштування фірми можна зробити пізніше. Для першого тесту достатньо цих полів.",
+  advanced: "Детальний розрахунок / Додаткові налаштування",
+  clientObject: "Клієнт / об’єкт",
+  city: "Місто",
+  selectedEmployees: "Обрані працівники",
+  manualHours: "Години вручну",
+  manualMaterials: "Матеріали вручну, €",
+  adminHours: "Огляд/кошторис/організація, год",
+  demolition: "Демонтаж",
+  preparation: "Підготовка основи",
+  partnerCommission: "Комісія партнера",
+  partnerHint: "Комісія партнера — гроші за приведеного клієнта. Вона зменшує ваш прибуток.",
+  commissionSize: "Розмір комісії",
+  paidVisit: "Платний виїзд",
+  paidVisitPrice: "Вартість платного виїзду, €",
+  pricesEyebrow: "Мої ціни",
+  workTemplates: "Шаблони робіт",
+  addTemplate: "+ Шаблон",
+  settingsEyebrow: "Працівники та витрати",
+  realCostTitle: "Реальна собівартість фірми",
+  company: "Фірма",
+  companyName: "Назва фірми",
+  taxMode: "Податковий режим",
+  includeVat: "Включати ПДВ у ціну клієнту",
+  minProfit: "Мінімальний прибуток, %",
+  minProfitHint: "Це нижня межа маржі, за якої замовлення ще має сенс для фірми.",
+  riskReserve: "Ризик/резерв за замовчуванням, %",
+  riskHint: "Ризик — резерв на непередбачені роботи: докупки, переробки, простої та приховані дефекти.",
+  defaultPartner: "Комісія партнера за замовчуванням, %",
+  visitPrice: "Вартість виїзду, €",
+  kmPrice: "Ціна за км, €",
+  wizardTitle: "Налаштувати фірму за 3 хвилини",
+  apply: "Застосувати",
+  step1: "Крок 1",
+  step2: "Крок 2",
+  step3: "Крок 3",
+  step4: "Крок 4",
+  whoWorks: "Хто працює у фірмі?",
+  employeeCount: "Кількість працівників",
+  avgHourCost: "Середня вартість години, €",
+  productiveTime: "Продуктивний час, %",
+  productiveHint: "Продуктивний час — це години, за які працівник реально приносить гроші. Дорога, закупівля матеріалів і простої сюди не входять.",
+  fixedCosts: "Постійні витрати",
+  fixedCostsHint: "Ці витрати фірма платить щомісяця. Додаток розподіляє їх на замовлення, щоб ви не працювали в мінус.",
+  vehicle: "Авто, €/міс",
+  insurance: "Страхування, €/міс",
+  accountant: "Бухгалтер, €/міс",
+  ads: "Реклама, €/міс",
+  tools: "Інструмент, €/міс",
+  other: "Інше, €/міс",
+  calcRules: "Правила розрахунку",
+  desiredMargin: "Мінімальна бажана маржа, %",
+  riskPercent: "Ризик / резерв, %",
+  defaultPartnerPercent: "Комісія партнера, %",
+  taxModeLabel: "Податковий режим",
+  ready: "Готово",
+  readyText: "Тепер можна рахувати перший кошторис. Налаштування можна змінити пізніше.",
+  goEstimate: "Перейти до нового кошторису",
+  employees: "Працівники",
+  addEmployee: "+ Додати",
+  productiveSectionHint: "Продуктивний час — це години, за які працівник реально приносить гроші. Дорога, закупки та простої сюди не входять.",
+  overheads: "Постійні витрати фірми",
+  overheadsHint: "Постійні витрати — це гроші, які фірма платить щомісяця, навіть якщо об’єкт маленький.",
+  resultEyebrow: "Результат",
+  resultTitle: "Ціна, нижче якої не варто опускатися",
+  noCalc: "Немає розрахунку",
+  clickCalculate: "Натисніть “Розрахувати кошторис”",
+  recommendedPrice: "Рекомендована ціна клієнту",
+  safePriceDanger: "Нижче цієї ціни замовлення брати небезпечно",
+  safePriceHint: "Мінімальна безпечна ціна — нижче цієї суми замовлення може бути невигідним.",
+  selfCost: "Собівартість",
+  profit: "Прибуток",
+  margin: "Маржа",
+  marginHint: "Маржа — скільки залишається фірмі після витрат.",
+  orderCheck: "Перевірка замовлення",
+  checkPriceTitle: "Хочете перевірити свою ціну?",
+  checkPriceHint: "Введіть ціну, яку хочете назвати клієнту, і програма покаже прибуток та ризик.",
+  desiredClientPrice: "Бажана ціна клієнту, €",
+  manualPriceEmpty: "Введіть ціну, щоб побачити прибуток і маржу.",
+  copyWhatsapp: "Скопіювати WhatsApp-текст",
+  newEstimate: "Новий кошторис",
+  showBreakdown: "Показати детальний розрахунок",
+  hideBreakdown: "Сховати детальний розрахунок",
+  howCalculated: "Детальний розрахунок",
+  internalHint: "Це внутрішня інформація для власника фірми. Клієнту її не показувати.",
+  sendToClient: "Що надсилаємо клієнту",
+  clientTextHint: "Цей текст можна надіслати клієнту. Він не містить внутрішню собівартість і прибуток.",
+  copyFullGerman: "Скопіювати повний німецький текст",
+  customerOffer: "Пропозиція для клієнта",
+  copyGerman: "Скопіювати німецький текст",
+  showInstruction: "Показати інструкцію знову",
+  footer: "Тестова версія. Розрахунок є орієнтовним і не замінює професійний кошторис.",
+  copied: "Скопійовано",
+  whatsappShort: "Коротке WhatsApp-повідомлення",
+  fullOffer: "Повний текст пропозиції",
+  germanClientText: "Німецький текст для клієнта",
+  russianTranslation: "Російський переклад",
+  ukrainianTranslation: "Український переклад",
+  materials: "Матеріали",
+  workHours: "Робочі години",
+  employeeCost: "Вартість працівників",
+  adminCost: "Адмін/кошторис/організація",
+  travel: "Дорога",
+  overheadShare: "Частка постійних витрат фірми",
+  risk: "Ризик/резерв",
+  profitPerDay: "Прибуток за день",
+  profitPerPersonDay: "Прибуток на людино-день",
+  vat: "ПДВ",
+  finalClientPrice: "Підсумкова ціна клієнту",
+  statusOk: "Зелений · замовлення вигідне",
+  statusWarn: "Жовтий · узгодити бюджет",
+  statusDanger: "Червоний · перерахувати",
+  statusOkSimple: "Можна брати",
+  statusWarnSimple: "Брати тільки після узгодження бюджету",
+  statusDangerSimple: "Не брати за такою ціною",
+  validationArea: "Введіть площу об’єкта",
+  validationPeople: "Вкажіть кількість людей",
+  validationDays: "Вкажіть кількість днів",
+  validationDistance: "Вкажіть відстань до об’єкта",
+  warnMargin: "Маржа нижче безпечного рівня. Перевірте ціну перед відправкою клієнту.",
+  warnProfitDay: "Прибуток за день занадто малий для нормального завантаження фірми.",
+  warnPartner: "Комісія партнера помітно зменшує прибуток по цьому замовленню.",
+  warnTravel: "Дорога і підготовка займають багато часу. Не варто їхати без попереднього узгодження бюджету.",
+  warnSafe: "Ціна нижче мінімальної безпечної. Є ризик роботи майже без прибутку.",
+  warnManualSafe: "Ручна ціна нижче мінімальної безпечної. Таке замовлення легко піде майже без прибутку.",
+  manualStatusOk: "вигідно",
+  manualStatusWarn: "ризиковано",
+  manualStatusDanger: "невигідно"
+};
+
+Object.assign(translations.ru, {
+  category: "Направление",
+  templateName: "Название работы",
+  unit: "Единица",
+  hoursPerUnit: "Часы на единицу",
+  materialPerUnit: "Материал на единицу, €",
+  preparationPerUnit: "Подготовка, ч/ед.",
+  demolitionPerUnit: "Демонтаж, ч/ед.",
+  disposalPerUnit: "Вывоз мусора, €/ед.",
+  materialMarkup: "Наценка на материалы, %",
+  minPositionPrice: "Мин. цена позиции, €",
+  employeeName: "Имя",
+  employeeType: "Тип",
+  bruttoRate: "Brutto/ставка",
+  extraCost: "Доп. расходы %",
+  hoursMonth: "Часы/мес",
+  productivePercent: "Продуктивно %",
+  internalHourCost: "Себестоимость €/ч",
+  settingsApplied: "Настройки применены",
+  ifNeeded: "если нужно",
+  ifKnown: "если известно"
+});
+
+Object.assign(translations.de, {
+  category: "Bereich",
+  templateName: "Leistung",
+  unit: "Einheit",
+  hoursPerUnit: "Stunden pro Einheit",
+  materialPerUnit: "Material pro Einheit, €",
+  preparationPerUnit: "Vorbereitung, Std./Einheit",
+  demolitionPerUnit: "Demontage, Std./Einheit",
+  disposalPerUnit: "Entsorgung, €/Einheit",
+  materialMarkup: "Materialaufschlag, %",
+  minPositionPrice: "Mindestpreis Position, €",
+  employeeName: "Name",
+  employeeType: "Typ",
+  bruttoRate: "Brutto/Satz",
+  extraCost: "Zusatzkosten %",
+  hoursMonth: "Std./Monat",
+  productivePercent: "Produktiv %",
+  internalHourCost: "Interne Kosten €/Std.",
+  settingsApplied: "Einstellungen übernommen",
+  ifNeeded: "falls nötig",
+  ifKnown: "falls bekannt"
+});
+
+Object.assign(translations.ua, {
+  category: "Напрям",
+  templateName: "Назва роботи",
+  unit: "Одиниця",
+  hoursPerUnit: "Години на одиницю",
+  materialPerUnit: "Матеріал на одиницю, €",
+  preparationPerUnit: "Підготовка, год/од.",
+  demolitionPerUnit: "Демонтаж, год/од.",
+  disposalPerUnit: "Вивіз сміття, €/од.",
+  materialMarkup: "Націнка на матеріали, %",
+  minPositionPrice: "Мін. ціна позиції, €",
+  employeeName: "Ім’я",
+  employeeType: "Тип",
+  bruttoRate: "Brutto/ставка",
+  extraCost: "Дод. витрати %",
+  hoursMonth: "Год/міс",
+  productivePercent: "Продуктивно %",
+  internalHourCost: "Собівартість €/год",
+  settingsApplied: "Налаштування застосовано",
+  ifNeeded: "якщо потрібно",
+  ifKnown: "якщо відомо"
+});
 
 const overheadLabels = {
   accountant: "Бухгалтер",
@@ -121,10 +719,35 @@ const defaultState = {
 
 let state = loadState();
 let currentView = "internal";
+let currentLang = localStorage.getItem(LANGUAGE_KEY) || "ru";
 
 const $ = (id) => document.getElementById(id);
 const money = (value) => `${Math.round(value).toLocaleString("de-DE")} €`;
 const num = (value) => Number(value) || 0;
+const t = (key) => translations[currentLang]?.[key] ?? translations.ru[key] ?? key;
+
+function setText(selector, value) {
+  const el = document.querySelector(selector);
+  if (el) el.textContent = value;
+}
+
+function setAllText(selector, values) {
+  document.querySelectorAll(selector).forEach((el, index) => {
+    if (values[index] !== undefined) el.textContent = values[index];
+  });
+}
+
+function setLabelText(selector, value) {
+  const label = document.querySelector(selector);
+  if (!label) return;
+  const node = Array.from(label.childNodes).find((child) => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+  if (node) node.textContent = `${value}\n              `;
+}
+
+function setPlaceholder(id, value) {
+  const el = $(id);
+  if (el) el.placeholder = value;
+}
 
 function loadState() {
   try {
@@ -145,11 +768,169 @@ function mergeState(base, saved) {
   };
 }
 
+function applyLanguage() {
+  document.documentElement.lang = currentLang === "ua" ? "uk" : currentLang;
+  document.title = t("appName");
+  document.querySelectorAll(".lang-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.lang === currentLang);
+  });
+
+  setText(".app-header .eyebrow", t("appName"));
+  setText(".app-header h1", t("heroTitle"));
+  setText(".hero-copy", t("heroCopy"));
+  setText("#resetCalculationBtn", t("reset"));
+  setText("#saveSettingsBtn", t("save"));
+  setText("#welcomePanel .eyebrow", t("firstRun"));
+  setText("#welcomePanel h2", t("welcomeTitle"));
+  setText(".welcome-copy", t("welcomeCopy"));
+  setAllText(".welcome-points p", [t("welcome1"), t("welcome2"), t("welcome3")]);
+  setText("#welcomeDemoBtn", t("startDemo"));
+  setText("#welcomeNewBtn", t("createEstimate"));
+  setText("#welcomeSettingsBtn", t("setupCompany"));
+  setText("#hideWelcomeBtn", t("hideWelcome"));
+  setAllText(".tab", [t("navEstimate"), t("navPrices"), t("navSettings"), t("navResult")]);
+  setText("#usageGuide summary", t("howTo"));
+  setAllText(".guide-body p", t("guide"));
+
+  setText("#calculator .section-head .eyebrow", t("newEstimateEyebrow"));
+  setText("#calculator .section-head h2", t("quickCalcTitle"));
+  setText("#loadDemoBtn", t("useDemo"));
+  setText("#resetDemoBtn", t("resetDemo"));
+  setLabelText("label:has(#workType)", t("workType"));
+  setLabelText("label:has(#quantity)", t("area"));
+  setLabelText("label:has(#complexity)", t("complexity"));
+  setLabelText("label:has(#peopleCount)", t("people"));
+  setLabelText("label:has(#daysCount)", t("days"));
+  setLabelText("label:has(#distanceKm)", t("distance"));
+  setText("label:has(#hasPartner) span", t("partnerBrought"));
+  setText("#calculateBtn", t("calculate"));
+  setText(".simple-note", t("simpleNote"));
+  setText(".advanced-box summary", t("advanced"));
+  setLabelText("label:has(#clientName)", t("clientObject"));
+  setLabelText("label:has(#city)", t("city"));
+  setLabelText("label:has(#employeeSelect)", t("selectedEmployees"));
+  setLabelText("label:has(#manualHours)", t("manualHours"));
+  setLabelText("label:has(#manualMaterials)", t("manualMaterials"));
+  setPlaceholder("manualHours", t("ifNeeded"));
+  setPlaceholder("manualMaterials", t("ifKnown"));
+  setLabelText("label:has(#adminHours)", t("adminHours"));
+  setText("label:has(#hasDemolition) span", t("demolition"));
+  setText("label:has(#hasPreparation) span", t("preparation"));
+  setLabelText("label:has(#partnerMode)", t("partnerCommission"));
+  setText("label:has(#partnerMode) .field-hint", t("partnerHint"));
+  setLabelText("label:has(#partnerValue)", t("commissionSize"));
+  setText("label:has(#paidVisit) span", t("paidVisit"));
+  setLabelText("label:has(#paidVisitPrice)", t("paidVisitPrice"));
+
+  setText("#templates .section-head .eyebrow", t("pricesEyebrow"));
+  setText("#templates .section-head h2", t("workTemplates"));
+  setText("#addTemplateBtn", t("addTemplate"));
+  setText("#settings .section-head .eyebrow", t("settingsEyebrow"));
+  setText("#settings .section-head h2", t("realCostTitle"));
+  setText(".settings-card h3", t("company"));
+  setLabelText("label:has(#companyName)", t("companyName"));
+  setLabelText("label:has(#taxMode)", t("taxMode"));
+  setText("label:has(#includeVat) span", t("includeVat"));
+  setLabelText("label:has(#minProfit)", t("minProfit"));
+  setText("label:has(#minProfit) .field-hint", t("minProfitHint"));
+  setLabelText("label:has(#defaultRisk)", t("riskReserve"));
+  setText("label:has(#defaultRisk) .field-hint", t("riskHint"));
+  setLabelText("label:has(#defaultPartnerCommission)", t("defaultPartner"));
+  setLabelText("label:has(#visitPrice)", t("visitPrice"));
+  setLabelText("label:has(#kmPrice)", t("kmPrice"));
+
+  setText(".setup-wizard .subhead h3", t("wizardTitle"));
+  setText("#applyWizardBtn", t("apply"));
+  setAllText(".step-label", [t("step1"), t("step2"), t("step3"), t("step4")]);
+  setAllText(".wizard-steps h4", [t("whoWorks"), t("fixedCosts"), t("calcRules"), t("ready")]);
+  setLabelText("label:has(#wizardEmployeeCount)", t("employeeCount"));
+  setLabelText("label:has(#wizardHourCost)", t("avgHourCost"));
+  setLabelText("label:has(#wizardProductive)", t("productiveTime"));
+  setText("label:has(#wizardProductive) .field-hint", t("productiveHint"));
+  setText(".wizard-steps article:nth-child(2) .section-hint", t("fixedCostsHint"));
+  setLabelText("label:has(#wizardVehicle)", t("vehicle"));
+  setLabelText("label:has(#wizardInsurance)", t("insurance"));
+  setLabelText("label:has(#wizardAccountant)", t("accountant"));
+  setLabelText("label:has(#wizardAds)", t("ads"));
+  setLabelText("label:has(#wizardTools)", t("tools"));
+  setLabelText("label:has(#wizardOther)", t("other"));
+  setLabelText("label:has(#wizardMinProfit)", t("desiredMargin"));
+  setLabelText("label:has(#wizardRisk)", t("riskPercent"));
+  setLabelText("label:has(#wizardPartnerCommission)", t("defaultPartnerPercent"));
+  setLabelText("label:has(#wizardTaxMode)", t("taxModeLabel"));
+  setText(".wizard-steps article:nth-child(4) p", t("readyText"));
+  setText("#wizardToCalculatorBtn", t("goEstimate"));
+  setAllText("#settings > .subhead h3", [t("employees"), t("overheads")]);
+  setText("#addEmployeeBtn", t("addEmployee"));
+  setAllText("#settings > .section-hint", [t("productiveSectionHint"), t("overheadsHint")]);
+  setAllText("thead th", [
+    t("employeeName"),
+    t("employeeType"),
+    t("bruttoRate"),
+    t("extraCost"),
+    t("hoursMonth"),
+    t("productivePercent"),
+    t("internalHourCost"),
+    ""
+  ]);
+
+  setText("#result .section-head .eyebrow", t("resultEyebrow"));
+  setText("#result .section-head h2", t("resultTitle"));
+  setAllText(".segmented button", ["Interne Ansicht", "Kundenansicht"]);
+  setText(".metric-card.main span", t("recommendedPrice"));
+  setText(".metric-card.danger-note span", t("safePriceDanger"));
+  setText(".metric-card.danger-note .metric-hint", t("safePriceHint"));
+  setAllText(".metric-grid .metric-card:not(.main):not(.danger-note) > span", [t("selfCost"), t("profit"), t("margin")]);
+  setText(".metric-grid .metric-card:nth-child(5) .metric-hint", t("marginHint"));
+  setText("#orderCheck h3", t("orderCheck"));
+  setText(".manual-price h3", t("checkPriceTitle"));
+  setText(".manual-price .section-hint", t("checkPriceHint"));
+  setLabelText("label:has(#manualClientPrice)", t("desiredClientPrice"));
+  setPlaceholder("manualClientPrice", currentLang === "de" ? "z. B. 4500" : currentLang === "ua" ? "наприклад 4500" : "например 4500");
+  setText("#copyWhatsappBtn", t("copyWhatsapp"));
+  setText("#newEstimateBtn", t("newEstimate"));
+  setText("#toggleBreakdownBtn", $("breakdownPanel")?.hidden ? t("showBreakdown") : t("hideBreakdown"));
+  setText(".breakdown-panel h3", t("howCalculated"));
+  setText(".breakdown-panel .section-hint", t("internalHint"));
+  setText(".send-card h3", t("sendToClient"));
+  setText(".send-card .section-hint", t("clientTextHint"));
+  setText("#copyGermanInlineBtn", t("copyFullGerman"));
+  setText("#customerTitle", t("customerOffer"));
+  setText("#copyGermanBtn", t("copyGerman"));
+  setText("#showWelcomeAgainBtn", t("showInstruction"));
+  setText(".app-footer span", t("footer"));
+
+  setComplexityOptions();
+  renderWorkTypeOptions();
+  if (state.lastResult) renderResult(state.lastResult);
+  else resetEmptyResultText();
+}
+
+function resetEmptyResultText() {
+  $("statusBadge").className = "status";
+  $("statusBadge").textContent = t("noCalc");
+  $("marginText").textContent = t("clickCalculate");
+  $("statusExplanation").textContent = t("clickCalculate");
+  $("orderCheckText").textContent = t("clickCalculate");
+  $("manualPriceResult").textContent = t("manualPriceEmpty");
+}
+
+function setComplexityOptions() {
+  const labels = {
+    ru: { simple: "simple", medium: "medium", hard: "hard" },
+    de: { simple: "einfach", medium: "mittel", hard: "schwer" },
+    ua: { simple: "просто", medium: "середньо", hard: "складно" }
+  }[currentLang];
+  document.querySelectorAll("#complexity option").forEach((option) => {
+    option.textContent = labels[option.value] || option.value;
+  });
+}
+
 function saveState(showMessage = true) {
   syncFromDom();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   if (showMessage) {
-    $("saveState").textContent = "Сохранено";
+    $("saveState").textContent = t("saved");
     setTimeout(() => ($("saveState").textContent = "localStorage"), 1400);
   }
 }
@@ -166,6 +947,7 @@ function getTrockenbauTemplateIndex() {
 }
 
 function renderEmployees() {
+  const hourUnit = currentLang === "de" ? "€/Std." : currentLang === "ua" ? "€/год" : "€/ч";
   $("employeesBody").innerHTML = state.employees.map((employee, index) => `
     <tr>
       <td><input data-employee="${index}" data-field="name" value="${escapeHtml(employee.name)}"></td>
@@ -178,7 +960,7 @@ function renderEmployees() {
       <td><input type="number" step="1" data-employee="${index}" data-field="extra" value="${employee.extra}"></td>
       <td><input type="number" step="1" data-employee="${index}" data-field="hours" value="${employee.hours}"></td>
       <td><input type="number" step="1" data-employee="${index}" data-field="productive" value="${employee.productive}"></td>
-      <td><strong>${employeeHourCost(employee).toFixed(2)} €/ч</strong></td>
+      <td><strong>${employeeHourCost(employee).toFixed(2)} ${hourUnit}</strong></td>
       <td><button class="icon-btn" data-remove-employee="${index}" type="button" title="Удалить">×</button></td>
     </tr>
   `).join("");
@@ -186,16 +968,28 @@ function renderEmployees() {
 }
 
 function renderEmployeeSelect() {
+  const hourUnit = currentLang === "de" ? "€/Std." : currentLang === "ua" ? "€/год" : "€/ч";
   $("employeeSelect").innerHTML = state.employees.map((employee, index) => `
     <option value="${index}" ${state.project.selectedEmployees.includes(index) ? "selected" : ""}>
-      ${escapeHtml(employee.name)} · ${employeeHourCost(employee).toFixed(2)} €/ч
+      ${escapeHtml(employee.name)} · ${employeeHourCost(employee).toFixed(2)} ${hourUnit}
     </option>
   `).join("");
 }
 
 function renderOverheads() {
+  const labels = {
+    accountant: t("accountant").replace(", €/мес", "").replace(", €/Monat", "").replace(", €/міс", ""),
+    vehicle: t("vehicle").replace(", €/мес", "").replace(", €/Monat", "").replace(", €/міс", ""),
+    insurance: t("insurance").replace(", €/мес", "").replace(", €/Monat", "").replace(", €/міс", ""),
+    tools: t("tools").replace(", €/мес", "").replace(", €/Monat", "").replace(", €/міс", ""),
+    ads: t("ads").replace(", €/мес", "").replace(", €/Monat", "").replace(", €/міс", ""),
+    phone: currentLang === "de" ? "Telefon/Internet" : currentLang === "ua" ? "Телефон/інтернет" : "Телефон/интернет",
+    storage: currentLang === "de" ? "Lager/Büro" : currentLang === "ua" ? "Склад/офіс" : "Склад/офис",
+    software: currentLang === "de" ? "Software" : "Софт",
+    other: t("other").replace(", €/мес", "").replace(", €/Monat", "").replace(", €/міс", "")
+  };
   $("overheadsGrid").innerHTML = Object.entries(overheadLabels).map(([key, label]) => `
-    <label>${label}
+    <label>${labels[key] || label}
       <input type="number" min="0" step="5" data-overhead="${key}" value="${state.overheads[key]}">
     </label>
   `).join("");
@@ -213,17 +1007,17 @@ function renderTemplates() {
         <button class="icon-btn" data-remove-template="${index}" type="button" title="Удалить">×</button>
       </header>
       <div class="grid two">
-        ${templateInput(index, "category", "Направление", tpl.category)}
-        ${templateInput(index, "name", "Название работы", tpl.name)}
-        ${templateSelect(index, "unit", "Единица", tpl.unit, ["м²", "погонный метр", "штука", "час"])}
-        ${templateInput(index, "hoursPerUnit", "Часы на единицу", tpl.hoursPerUnit, "number", "0.01")}
-        ${templateInput(index, "materialPerUnit", "Материал на единицу, €", tpl.materialPerUnit, "number", "0.1")}
-        ${templateSelect(index, "complexity", "Сложность", tpl.complexity, ["simple", "medium", "hard"])}
-        ${templateInput(index, "preparation", "Подготовка, ч/ед.", tpl.preparation, "number", "0.01")}
-        ${templateInput(index, "demolition", "Демонтаж, ч/ед.", tpl.demolition, "number", "0.01")}
-        ${templateInput(index, "disposal", "Вывоз мусора, €/ед.", tpl.disposal, "number", "0.1")}
-        ${templateInput(index, "materialMarkup", "Наценка на материалы, %", tpl.materialMarkup, "number", "1")}
-        ${templateInput(index, "minPrice", "Мин. цена позиции, €", tpl.minPrice, "number", "10")}
+        ${templateInput(index, "category", t("category"), tpl.category)}
+        ${templateInput(index, "name", t("templateName"), tpl.name)}
+        ${templateSelect(index, "unit", t("unit"), tpl.unit, ["м²", "погонный метр", "штука", "час"])}
+        ${templateInput(index, "hoursPerUnit", t("hoursPerUnit"), tpl.hoursPerUnit, "number", "0.01")}
+        ${templateInput(index, "materialPerUnit", t("materialPerUnit"), tpl.materialPerUnit, "number", "0.1")}
+        ${templateSelect(index, "complexity", t("complexity"), tpl.complexity, ["simple", "medium", "hard"])}
+        ${templateInput(index, "preparation", t("preparationPerUnit"), tpl.preparation, "number", "0.01")}
+        ${templateInput(index, "demolition", t("demolitionPerUnit"), tpl.demolition, "number", "0.01")}
+        ${templateInput(index, "disposal", t("disposalPerUnit"), tpl.disposal, "number", "0.1")}
+        ${templateInput(index, "materialMarkup", t("materialMarkup"), tpl.materialMarkup, "number", "1")}
+        ${templateInput(index, "minPrice", t("minPositionPrice"), tpl.minPrice, "number", "10")}
       </div>
     </article>
   `).join("");
@@ -406,10 +1200,10 @@ function calculate() {
 
 function validateProjectInput() {
   const errors = [];
-  if (num($("quantity").value) <= 0) errors.push("Введите площадь объекта");
-  if (num($("peopleCount").value) <= 0) errors.push("Укажите количество людей");
-  if (num($("daysCount").value) <= 0) errors.push("Укажите количество дней");
-  if ($("distanceKm").value.trim() === "" || num($("distanceKm").value) < 0) errors.push("Укажите расстояние до объекта");
+  if (num($("quantity").value) <= 0) errors.push(t("validationArea"));
+  if (num($("peopleCount").value) <= 0) errors.push(t("validationPeople"));
+  if (num($("daysCount").value) <= 0) errors.push(t("validationDays"));
+  if ($("distanceKm").value.trim() === "" || num($("distanceKm").value) < 0) errors.push(t("validationDistance"));
 
   $("formErrors").hidden = errors.length === 0;
   $("formErrors").innerHTML = errors.map((error) => `<div>${escapeHtml(error)}</div>`).join("");
@@ -432,9 +1226,9 @@ function renderResult(result) {
   result.baseCost = Number.isFinite(result.baseCost) ? result.baseCost : result.netTotal - result.profit;
   result.safeGross = Number.isFinite(result.safeGross) ? result.safeGross : result.grossTotal;
   const statusText = {
-    ok: "Зелёный · заказ выгодный",
-    warn: "Жёлтый · согласовать бюджет",
-    danger: "Красный · пересчитать"
+    ok: t("statusOk"),
+    warn: t("statusWarn"),
+    danger: t("statusDanger")
   }[result.status];
   $("statusBadge").className = `status ${result.status}`;
   $("statusBadge").textContent = statusText;
@@ -454,20 +1248,22 @@ function renderResult(result) {
   $("breakdownPanel").hidden = true;
   $("toggleBreakdownBtn").textContent = "Показать подробный расчёт";
 
+  const hourLabel = currentLang === "de" ? "Std." : currentLang === "ua" ? "год" : "ч";
+  const hourCostLabel = currentLang === "de" ? "€/Std." : currentLang === "ua" ? "€/год" : "€/ч";
   const lines = [
-    ["Материалы", result.materials],
-    ["Рабочие часы", `${result.plannedHours.toFixed(1)} ч · ${result.avgHourCost.toFixed(2)} €/ч`],
-    ["Стоимость сотрудников", result.employeeCost],
-    ["Админ/смета/организация", result.adminCost],
-    ["Дорога", result.travel],
-    ["Доля постоянных расходов фирмы", result.overheadShare],
-    ["Партнёрская комиссия", result.partnerCommission],
-    ["Риск/резерв", result.risk],
-    ["Прибыль", result.profit],
-    ["Прибыль в день", result.profitPerDay],
-    ["Прибыль на человеко-день", result.profitPerPersonDay],
-    ...(result.vat > 0 ? [["НДС", result.vat]] : []),
-    ["Итоговая цена клиенту", result.grossTotal]
+    [t("materials"), result.materials],
+    [t("workHours"), `${result.plannedHours.toFixed(1)} ${hourLabel} · ${result.avgHourCost.toFixed(2)} ${hourCostLabel}`],
+    [t("employeeCost"), result.employeeCost],
+    [t("adminCost"), result.adminCost],
+    [t("travel"), result.travel],
+    [t("overheadShare"), result.overheadShare],
+    [t("partnerCommission"), result.partnerCommission],
+    [t("risk"), result.risk],
+    [t("profit"), result.profit],
+    [t("profitPerDay"), result.profitPerDay],
+    [t("profitPerPersonDay"), result.profitPerPersonDay],
+    ...(result.vat > 0 ? [[t("vat"), result.vat]] : []),
+    [t("finalClientPrice"), result.grossTotal]
   ];
   $("breakdown").innerHTML = lines.map(([label, value]) => `
     <div class="line-item">
@@ -480,19 +1276,23 @@ function renderResult(result) {
 
 function renderOrderCheck(result) {
   const reasons = [];
-  if (result.margin < result.company.minProfit) reasons.push("маржа ниже вашего минимума");
-  if (result.partnerCommission > 0) reasons.push("есть комиссия партнёра");
-  if (result.travel + result.adminCost > result.netTotal * 0.12) reasons.push("дорога и подготовка забирают заметную часть цены");
-  if ((result.profitPerDay || 0) < 250) reasons.push("прибыль в день низкая");
+  if (result.margin < result.company.minProfit) reasons.push(currentLang === "de" ? "Marge unter Ihrem Minimum" : currentLang === "ua" ? "маржа нижче вашого мінімуму" : "маржа ниже вашего минимума");
+  if (result.partnerCommission > 0) reasons.push(currentLang === "de" ? "Partnerprovision vorhanden" : currentLang === "ua" ? "є комісія партнера" : "есть комиссия партнёра");
+  if (result.travel + result.adminCost > result.netTotal * 0.12) reasons.push(currentLang === "de" ? "Anfahrt und Vorbereitung nehmen einen großen Teil des Preises ein" : currentLang === "ua" ? "дорога і підготовка забирають помітну частину ціни" : "дорога и подготовка забирают заметную часть цены");
+  if ((result.profitPerDay || 0) < 250) reasons.push(currentLang === "de" ? "Gewinn pro Tag ist niedrig" : currentLang === "ua" ? "прибуток за день низький" : "прибыль в день низкая");
 
-  let verdict = "Можно брать";
-  if (result.status === "warn") verdict = "Брать только после согласования бюджета";
-  if (result.status === "danger") verdict = "Не брать по такой цене";
+  let verdict = t("statusOkSimple");
+  if (result.status === "warn") verdict = t("statusWarnSimple");
+  if (result.status === "danger") verdict = t("statusDangerSimple");
 
   $("orderCheck").className = `order-check ${result.status}`;
   $("orderCheckText").textContent = reasons.length
     ? `${verdict}: ${reasons.slice(0, 2).join("; ")}.`
-    : `${verdict}: цена покрывает расходы, риск и прибыль.`;
+    : currentLang === "de"
+      ? `${verdict}: Preis deckt Kosten, Risiko und Gewinn.`
+      : currentLang === "ua"
+        ? `${verdict}: ціна покриває витрати, ризик і прибуток.`
+        : `${verdict}: цена покрывает расходы, риск и прибыль.`;
 }
 
 function renderWarnings(result) {
@@ -502,23 +1302,23 @@ function renderWarnings(result) {
   const netTotal = Math.max(1, result.netTotal);
 
   if (result.margin < minProfit) {
-    warnings.push("Маржа ниже безопасного уровня. Проверьте цену перед отправкой клиенту.");
+    warnings.push(t("warnMargin"));
   }
   if ((result.profitPerDay || 0) < 250) {
-    warnings.push("Прибыль в день слишком маленькая для нормальной загрузки фирмы.");
+    warnings.push(t("warnProfitDay"));
   }
   if (result.partnerCommission > Math.max(120, result.profit * 0.25)) {
-    warnings.push("Комиссия партнёра заметно снижает прибыль по этому заказу.");
+    warnings.push(t("warnPartner"));
   }
   if (adminAndTravel > netTotal * 0.12) {
-    warnings.push("Дорога и подготовка занимают много времени. Не стоит ехать без предварительного согласования бюджета.");
+    warnings.push(t("warnTravel"));
   }
   if (result.grossTotal < (result.safeGross || result.grossTotal) - 1) {
-    warnings.push("Цена ниже минимальной безопасной. Есть риск работы почти без прибыли.");
+    warnings.push(t("warnSafe"));
   }
   const manualClientPrice = $("manualClientPrice") ? num($("manualClientPrice").value) : num(result.project.manualClientPrice);
   if (manualClientPrice > 0 && manualClientPrice < (result.safeGross || result.grossTotal)) {
-    warnings.push("Ручная цена ниже минимальной безопасной. Такой заказ легко уйдёт почти без прибыли.");
+    warnings.push(t("warnManualSafe"));
   }
 
   $("warningsBox").hidden = warnings.length === 0;
@@ -545,43 +1345,67 @@ function updateManualPriceResult() {
   state.project.manualClientPrice = $("manualClientPrice").value;
   if (manualGross <= 0) {
     $("manualPriceResult").className = "manual-result";
-    $("manualPriceResult").textContent = "Введите цену, чтобы увидеть прибыль и маржу.";
+    $("manualPriceResult").textContent = t("manualPriceEmpty");
     renderWarnings(state.lastResult);
     return;
   }
 
   const check = getManualPriceResult(state.lastResult, manualGross);
   const statusText = {
-    ok: "выгодно",
-    warn: "опасно",
-    danger: "невыгодно"
+    ok: t("manualStatusOk"),
+    warn: t("manualStatusWarn"),
+    danger: t("manualStatusDanger")
   }[check.status];
   const safeWarning = manualGross < (state.lastResult.safeGross || state.lastResult.grossTotal)
-    ? ` Ниже безопасной цены ${money(state.lastResult.safeGross || state.lastResult.grossTotal)}.`
+    ? currentLang === "de"
+      ? ` Unter dem sicheren Preis ${money(state.lastResult.safeGross || state.lastResult.grossTotal)}.`
+      : currentLang === "ua"
+        ? ` Нижче безпечної ціни ${money(state.lastResult.safeGross || state.lastResult.grossTotal)}.`
+        : ` Ниже безопасной цены ${money(state.lastResult.safeGross || state.lastResult.grossTotal)}.`
     : "";
   $("manualPriceResult").className = `manual-result ${check.status}`;
-  $("manualPriceResult").textContent = `При цене ${money(manualGross)}: прибыль ${money(check.manualProfit)}, маржа ${check.manualMargin.toFixed(1)}%, статус — ${statusText}.${safeWarning}`;
+  $("manualPriceResult").textContent = currentLang === "de"
+    ? `Bei ${money(manualGross)}: Gewinn ${money(check.manualProfit)}, Marge ${check.manualMargin.toFixed(1)}%, Status — ${statusText}.${safeWarning}`
+    : currentLang === "ua"
+      ? `При ціні ${money(manualGross)}: прибуток ${money(check.manualProfit)}, маржа ${check.manualMargin.toFixed(1)}%, статус — ${statusText}.${safeWarning}`
+      : `При цене ${money(manualGross)}: прибыль ${money(check.manualProfit)}, маржа ${check.manualMargin.toFixed(1)}%, статус — ${statusText}.${safeWarning}`;
   renderWarnings(state.lastResult);
 }
 
 function getStatusExplanation(result) {
   const label = {
-    ok: "зелёный",
-    warn: "жёлтый",
-    danger: "красный"
+    ok: currentLang === "de" ? "grün" : currentLang === "ua" ? "зелений" : "зелёный",
+    warn: currentLang === "de" ? "gelb" : currentLang === "ua" ? "жовтий" : "жёлтый",
+    danger: currentLang === "de" ? "rot" : currentLang === "ua" ? "червоний" : "красный"
   }[result.status];
   const reasons = [];
-  if (result.partnerCommission > 0) reasons.push("комиссия партнёра");
-  if (result.travel > result.baseCost * 0.06) reasons.push("дорога");
-  if (result.overheadShare > result.baseCost * 0.12) reasons.push("постоянные расходы");
-  if (result.risk > result.baseCost * 0.07) reasons.push("резерв на риск");
+  if (result.partnerCommission > 0) reasons.push(currentLang === "de" ? "Partnerprovision" : currentLang === "ua" ? "комісія партнера" : "комиссия партнёра");
+  if (result.travel > result.baseCost * 0.06) reasons.push(currentLang === "de" ? "Anfahrt" : currentLang === "ua" ? "дорога" : "дорога");
+  if (result.overheadShare > result.baseCost * 0.12) reasons.push(currentLang === "de" ? "Fixkosten" : currentLang === "ua" ? "постійні витрати" : "постоянные расходы");
+  if (result.risk > result.baseCost * 0.07) reasons.push(currentLang === "de" ? "Risikoreserve" : currentLang === "ua" ? "резерв на ризик" : "резерв на риск");
   const reasonText = reasons.length
-    ? `${reasons.join(", ")} снижают маржу`
-    : `маржа ${result.margin.toFixed(1)}% сравнивается с вашим минимумом ${result.company.minProfit}%`;
+    ? currentLang === "de"
+      ? `${reasons.join(", ")} reduzieren die Marge`
+      : currentLang === "ua"
+        ? `${reasons.join(", ")} знижують маржу`
+        : `${reasons.join(", ")} снижают маржу`
+    : currentLang === "de"
+      ? `Marge ${result.margin.toFixed(1)}% wird mit Ihrem Minimum ${result.company.minProfit}% verglichen`
+      : currentLang === "ua"
+        ? `маржа ${result.margin.toFixed(1)}% порівнюється з вашим мінімумом ${result.company.minProfit}%`
+        : `маржа ${result.margin.toFixed(1)}% сравнивается с вашим минимумом ${result.company.minProfit}%`;
   if (result.status === "ok") {
-    return `Заказ ${label}: цена покрывает себестоимость, риск и вашу минимальную прибыль. Минимальная безопасная цена — ${money(result.safeGross || result.grossTotal)}.`;
+    return currentLang === "de"
+      ? `Auftrag ${label}: Der Preis deckt Selbstkosten, Risiko und Ihren Mindestgewinn. Minimal sicherer Preis — ${money(result.safeGross || result.grossTotal)}.`
+      : currentLang === "ua"
+        ? `Замовлення ${label}: ціна покриває собівартість, ризик і ваш мінімальний прибуток. Мінімальна безпечна ціна — ${money(result.safeGross || result.grossTotal)}.`
+        : `Заказ ${label}: цена покрывает себестоимость, риск и вашу минимальную прибыль. Минимальная безопасная цена — ${money(result.safeGross || result.grossTotal)}.`;
   }
-  return `Заказ ${label}, потому что ${reasonText}. Минимальная безопасная цена — ${money(result.safeGross || result.grossTotal)}.`;
+  return currentLang === "de"
+    ? `Auftrag ${label}, weil ${reasonText}. Minimal sicherer Preis — ${money(result.safeGross || result.grossTotal)}.`
+    : currentLang === "ua"
+      ? `Замовлення ${label}, тому що ${reasonText}. Мінімальна безпечна ціна — ${money(result.safeGross || result.grossTotal)}.`
+      : `Заказ ${label}, потому что ${reasonText}. Минимальная безопасная цена — ${money(result.safeGross || result.grossTotal)}.`;
 }
 
 function renderCustomerView(result) {
@@ -617,22 +1441,40 @@ Dieses Angebot ist eine Vorkalkulation und wird nach Besichtigung bzw. finalem A
 
 Это предварительная смета. Финальная цена подтверждается после осмотра или точного замера.`;
 
+  const ua = `Шановний клієнте,
+
+за запитаною роботою «${result.tpl.name}» у місті ${result.project.city} попередній діапазон ціни становить приблизно від ${money(rangeLow)} до ${money(rangeHigh)} ${result.company.includeVat ? "з ПДВ" : "нетто"}.
+
+Включені описані роботи, стандартні матеріали, організація, дорога та професійне виконання.
+
+Не включені приховані дефекти, додаткові пошкодження основи, спеціальні матеріали та роботи, які стануть видимими лише після відкриття конструкцій.
+
+Умова щодо виїзду: ${result.project.paidVisit ? `платний виїзд ${money(result.project.paidVisitPrice)} зараховується при замовленні.` : "окрема оплата виїзду тільки за попереднім погодженням."}
+
+Це попередній кошторис. Фінальна ціна підтверджується після огляду або точного заміру.`;
+
+  const translationBlock = currentLang === "de"
+    ? ""
+    : currentLang === "ua"
+      ? `<div class="lang-block"><strong>${escapeHtml(t("ukrainianTranslation"))}</strong>\n${escapeHtml(ua)}</div>`
+      : `<div class="lang-block"><strong>${escapeHtml(t("russianTranslation"))}</strong>\n${escapeHtml(ru)}</div>`;
+
   $("customerTitle").textContent = title;
-  $("customerIntro").textContent = `${result.project.clientName || "Клиент"} · ${result.project.quantity} ${result.tpl.unit}`;
+  $("customerIntro").textContent = `${result.project.clientName || (currentLang === "de" ? "Kunde" : currentLang === "ua" ? "Клієнт" : "Клиент")} · ${result.project.quantity} ${result.tpl.unit}`;
   $("customerText").innerHTML = `
-    <div class="lang-block compact" id="whatsappText"><strong>Короткое WhatsApp-сообщение</strong>\n${escapeHtml(whatsappDe)}</div>
+    <div class="lang-block compact" id="whatsappText"><strong>${escapeHtml(t("whatsappShort"))}</strong>\n${escapeHtml(whatsappDe)}</div>
     <details class="text-details" open>
-      <summary>Полный текст предложения</summary>
+      <summary>${escapeHtml(t("fullOffer"))}</summary>
       <div class="lang-block" id="germanText">${escapeHtml(de)}</div>
     </details>
-    <div class="lang-block">${escapeHtml(ru)}</div>
+    ${translationBlock}
   `;
   $("resultCustomerText").innerHTML = `
-    <div class="lang-block compact" id="inlineWhatsappText"><strong>Короткое WhatsApp-сообщение</strong>\n${escapeHtml(whatsappDe)}</div>
+    <div class="lang-block compact" id="inlineWhatsappText"><strong>${escapeHtml(t("whatsappShort"))}</strong>\n${escapeHtml(whatsappDe)}</div>
     <details class="text-details">
-      <summary>Полный текст предложения</summary>
-      <div class="lang-block" id="inlineGermanText"><strong>Немецкий текст для клиента</strong>\n${escapeHtml(de)}</div>
-      <div class="lang-block"><strong>Русский перевод</strong>\n${escapeHtml(ru)}</div>
+      <summary>${escapeHtml(t("fullOffer"))}</summary>
+      <div class="lang-block" id="inlineGermanText"><strong>${escapeHtml(t("germanClientText"))}</strong>\n${escapeHtml(de)}</div>
+      ${translationBlock}
     </details>
   `;
 }
@@ -642,9 +1484,9 @@ function resetCalculation() {
   state.lastResult = null;
   fillDom();
   $("statusBadge").className = "status";
-  $("statusBadge").textContent = "Нет расчёта";
+  $("statusBadge").textContent = t("noCalc");
   $("totalPrice").textContent = "0 €";
-  $("marginText").textContent = "Нажмите «Рассчитать смету»";
+  $("marginText").textContent = t("clickCalculate");
   $("breakdown").innerHTML = "";
   $("recommendedPrice").textContent = "0 €";
   $("safePrice").textContent = "0 €";
@@ -653,12 +1495,12 @@ function resetCalculation() {
   $("marginMetric").textContent = "0%";
   if ($("profitPerDay")) $("profitPerDay").textContent = "0 €";
   if ($("profitPerPersonDay")) $("profitPerPersonDay").textContent = "0 €";
-  $("statusExplanation").textContent = "Сначала рассчитайте смету.";
+  $("statusExplanation").textContent = t("clickCalculate");
   $("orderCheck").className = "order-check";
-  $("orderCheckText").textContent = "Сначала рассчитайте смету.";
+  $("orderCheckText").textContent = t("clickCalculate");
   $("manualClientPrice").value = "";
   $("manualPriceResult").className = "manual-result";
-  $("manualPriceResult").textContent = "Введите цену, чтобы увидеть прибыль и маржу.";
+  $("manualPriceResult").textContent = t("manualPriceEmpty");
   $("warningsBox").hidden = true;
   $("warningsBox").innerHTML = "";
   $("breakdownPanel").hidden = true;
@@ -733,7 +1575,7 @@ function applyWizardSetup() {
   };
   fillDom();
   saveState(false);
-  $("saveState").textContent = "Настройки применены";
+  $("saveState").textContent = t("settingsApplied");
   setTimeout(() => ($("saveState").textContent = "localStorage"), 1600);
 }
 
@@ -851,6 +1693,15 @@ $("addTemplateBtn").addEventListener("click", () => {
 $("saveSettingsBtn").addEventListener("click", () => saveState(true));
 $("calculateBtn").addEventListener("click", calculate);
 document.querySelector("[data-calc-shortcut]")?.addEventListener("click", calculate);
+document.querySelectorAll(".lang-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    currentLang = btn.dataset.lang;
+    localStorage.setItem(LANGUAGE_KEY, currentLang);
+    renderOverheads();
+    renderTemplates();
+    applyLanguage();
+  });
+});
 $("loadDemoBtn").addEventListener("click", loadDemoCalculation);
 $("welcomeDemoBtn").addEventListener("click", () => {
   hideWelcome();
@@ -888,26 +1739,27 @@ $("newEstimateBtn").addEventListener("click", () => {
   activateTab("calculator");
 });
 $("copyWhatsappBtn").addEventListener("click", async () => {
-  const text = $("inlineWhatsappText")?.textContent.replace("Короткое WhatsApp-сообщение", "").trim() || "";
+  const text = $("inlineWhatsappText")?.textContent.replace(t("whatsappShort"), "").trim() || "";
   if (!text) return;
   await navigator.clipboard.writeText(text);
-  $("copyWhatsappBtn").textContent = "Скопировано";
-  setTimeout(() => ($("copyWhatsappBtn").textContent = "Скопировать WhatsApp-текст"), 1400);
+  $("copyWhatsappBtn").textContent = t("copied");
+  setTimeout(() => ($("copyWhatsappBtn").textContent = t("copyWhatsapp")), 1400);
 });
 $("copyGermanBtn").addEventListener("click", async () => {
   const text = $("germanText")?.textContent || "";
   if (!text) return;
   await navigator.clipboard.writeText(text);
-  $("copyGermanBtn").textContent = "Скопировано";
-  setTimeout(() => ($("copyGermanBtn").textContent = "Скопировать немецкий текст"), 1400);
+  $("copyGermanBtn").textContent = t("copied");
+  setTimeout(() => ($("copyGermanBtn").textContent = t("copyGerman")), 1400);
 });
 $("copyGermanInlineBtn").addEventListener("click", async () => {
-  const text = $("inlineGermanText")?.textContent.replace("Немецкий текст для клиента", "").trim() || "";
+  const text = $("inlineGermanText")?.textContent.replace(t("germanClientText"), "").trim() || "";
   if (!text) return;
   await navigator.clipboard.writeText(text);
-  $("copyGermanInlineBtn").textContent = "Скопировано";
-  setTimeout(() => ($("copyGermanInlineBtn").textContent = "Скопировать полный немецкий текст"), 1400);
+  $("copyGermanInlineBtn").textContent = t("copied");
+  setTimeout(() => ($("copyGermanInlineBtn").textContent = t("copyFullGerman")), 1400);
 });
 
 fillDom();
 showWelcomeIfNeeded();
+applyLanguage();

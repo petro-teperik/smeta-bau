@@ -123,6 +123,36 @@ button.small {
   gap: 10px;
 }
 
+.language-switcher {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.language-switcher button {
+  min-height: 34px;
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  padding: 0 10px;
+  font-size: 0.85rem;
+  box-shadow: none;
+}
+
+.language-switcher button.active {
+  background: #fff;
+  color: var(--ink);
+}
+
+.language-switcher button:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 .action-stack {
   display: flex;
   flex-wrap: wrap;
@@ -954,6 +984,14 @@ td select {
 
   .header-actions button {
     flex: 1;
+  }
+
+  .language-switcher {
+    width: 100%;
+  }
+
+  .language-switcher button {
+    min-height: 42px;
   }
 
   .metric-card {
